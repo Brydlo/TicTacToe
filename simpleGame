@@ -1,0 +1,166 @@
+import java.util.Scanner;
+
+
+public class TicTacToe {
+
+    final static Scanner s = new Scanner(System.in);
+    static char[][] ticTacToe = new char[3][3];
+    
+    static Boolean xxx = false;
+    static Boolean ooo = false;
+    
+     public static void main(String[] args) {
+        putCharToArray();
+        printGame(ticTacToe);
+        for (int i = 0; i < 9; i++) {
+            moveX();
+            checkedGame();
+            if(checkedGame()) {
+                break;
+            }
+            moveO();
+            checkedGame();
+            if (checkedGame()) {
+                break;
+            }
+        }
+        announceTheWinner();
+    }
+
+    
+    public static void putCharToArray() {
+
+        for (int i = 0; i < ticTacToe.length; i++) {
+            for (int j = 0; j < ticTacToe.length; j++) {
+                ticTacToe[i][j] = ' ';
+            }
+        }
+    }
+
+    // check if row or column or any of diagonals is win for someone
+    public static void announceTheWinner() {
+
+        for (int i = 0; i < 3; i++) {
+            int row = 0;
+            int clm = 0;
+            int mDiag = 0;
+            int aDiag = 0;
+
+            for (int j = 0; j < 3; j++) {
+                row += ticTacToe[i][j];
+                clm += ticTacToe[j][i];
+                mDiag += ticTacToe[j][j];
+                aDiag += ticTacToe[j][2 - j];
+            }
+
+            // ASCII value for X is 88 (X+X+X is 264)
+            // ASCII value for O is 79 (O+O+O is 237)
+            xxx = xxx || row == 264 || clm == 264 || mDiag == 264 || aDiag == 264;
+            ooo = ooo || row == 237 || clm == 237 || mDiag == 237 || aDiag == 237;
+        }
+        
+        String result = xxx ? "X wins"
+                : ooo ? "O wins" : "Draw";
+
+        System.out.println(result);
+    }
+
+
+    public static void printGame(char[][] ticTacToe) {
+
+        System.out.println("---------");
+        for (int i = 0; i < 3; i++) {
+            System.out.printf(String.format("| %c %c %c |%n", ticTacToe[i][0], ticTacToe[i][1], ticTacToe[i][2]));
+        }
+        System.out.println("---------");
+    }
+
+    public static void moveX() {
+        while (true) {
+            int x1; int x2;
+
+            try {
+                x1 = s.nextInt();
+                x2 = s.nextInt();
+
+                if (x1 < 1 || x1 > 3 || x2 < 1 || x2 > 3) {
+                    System.out.println("Coordinates should be from 1 to 3!");
+                } else if (ticTacToe[x1 - 1][x2 - 1] == 'O' || ticTacToe[x1 - 1][x2 - 1] == 'X') {
+                    System.out.println("This cell is occupied! Choose another one!");
+                } else {
+                    ticTacToe[x1 - 1][x2 - 1] = 'X';
+                    printGame(ticTacToe);
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("You should enter numbers!");
+            }
+        }
+    }
+    public static void moveO() {
+        while (true) {
+            int x1; int x2;
+            s.nextLine();
+            try {
+                x1 = s.nextInt();
+                x2 = s.nextInt();
+
+                if (x1 < 1 || x1 > 3 || x2 < 1 || x2 > 3) {
+                    System.out.println("Coordinates should be from 1 to 3!");
+                } else if (ticTacToe[x1 - 1][x2 - 1] == 'O' || ticTacToe[x1 - 1][x2 - 1] == 'X') {
+                    System.out.println("This cell is occupied! Choose another one!");
+                } else {
+                    ticTacToe[x1 - 1][x2 - 1] = 'O';
+                    printGame(ticTacToe);
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("You should enter numbers!");
+            }
+        }
+    }
+    public static boolean checkedGame() {
+        int xs = 0;
+        int os = 0;
+
+        for (char[] a : ticTacToe) {
+            for (char b : a) {
+                if (b == 'X') {
+                    xs += 1;
+                } else if (b == 'O') {
+                    os += 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            int row = 0;
+            int clm = 0;
+            int mDiag = 0;
+            int aDiag = 0;
+
+            for (int j = 0; j < 3; j++) {
+                row += ticTacToe[i][j];
+                clm += ticTacToe[j][i];
+                mDiag += ticTacToe[j][j];
+                aDiag += ticTacToe[j][2 - j];
+            }
+
+            // ASCII value for X is 88 (X+X+X is 264)
+            // ASCII value for O is 79 (O+O+O is 237)
+            xxx = xxx || row == 264 || clm == 264 || mDiag == 264 || aDiag == 264;
+            ooo = ooo || row == 237 || clm == 237 || mDiag == 237 || aDiag == 237;
+        }
+        if (xxx || ooo) {
+            return true;
+        } else if (xs + os == 9) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}
+
+
+
